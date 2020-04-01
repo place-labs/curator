@@ -20,6 +20,12 @@ module Curator
         end
       end
 
+      def pass?(event : Event) : Bool
+        rules.all? do |rule|
+          rule.pass?(event)
+        end
+      end
+
       private def rules_config
         raise "Please define rules in config/rules.yml" unless File.exists?(RULES_PATH)
 

@@ -1,9 +1,11 @@
+require "json"
+
 module Curator
   class Event
     include JSON::Serializable
 
     getter evt : String
-    getter uts : Time
+    getter uts : Int64
     getter org : String
     getter bld : String
     getter lvl : String
@@ -13,5 +15,34 @@ module Curator
     getter val : Float64
     getter ref : String?
     getter cur : String?
+
+    def initialize(@evt, @uts, @org, @bld, @lvl, @loc, @src, @val, @mod = nil, @ref = nil, @cur = nil)
+    end
+
+    def blank?(attribute : String) : Bool
+      val = value(attribute)
+      val.nil? || val == ""
+    end
+
+    def value(attribute : String)
+      hash = to_h
+      hash[attribute]
+    end
+
+    def to_h
+      {
+        "evt" => evt,
+        "uts" => uts,
+        "org" => org,
+        "bld" => bld,
+        "lvl" => lvl,
+        "loc" => loc,
+        "src" => src,
+        "mod" => mod,
+        "val" => val,
+        "ref" => ref,
+        "cur" => cur,
+      }
+    end
   end
 end
