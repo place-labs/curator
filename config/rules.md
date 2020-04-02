@@ -8,8 +8,8 @@
 # Allowed Values: #
 
 * For `greater_than_equal` and `less_than_equal` operators
-  * values is an array with single `unix timestamp` value as a string.
-  * e.g ["1580276617006"]
+  * values is an array with single `unix timestamp` value as a `Int64`.
+  * e.g [1580276617006]
 * For `include` and `exclude`
   * values is an array with as many `string` values as needed.
   * To match against empty values, `blank` string value can be provided.

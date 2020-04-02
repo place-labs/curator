@@ -9,16 +9,10 @@ module Curator
       getter :attribute, :operation, :values
 
       @operation : Operation
-      @values : Array(Float64) | Array(String)
 
-      def initialize(@attribute : String, operation : String, values : Array(String))
+
+      def initialize(@attribute : String, operation : String, @values : Array(Float64) | Array(String))
         @operation = Operation.parse(operation)
-        @values = case attribute
-                  when "val"
-                    values.map(&.to_f64)
-                  else
-                    values
-                  end
       end
 
       def pass?(event : Event) : Bool

@@ -47,11 +47,15 @@ module Curator
       private def to_rule(config)
         attribute = config["attribute"].as_s
         operation = config["operation"].as_s
-        values = config["values"].as_a.map(&.as_s)
 
         if attribute == "uts"
+          values = config["values"].as_a.map(&.as_i64)
           UtsRule.new(attribute: attribute, operation: operation, values: values)
+        elsif attribute == "val"
+          values = config["values"].as_a.map(&.as_f)
+          Rule.new(attribute: attribute, operation: operation, values: values)
         else
+          values = config["values"].as_a.map(&.as_s)
           Rule.new(attribute: attribute, operation: operation, values: values)
         end
       end

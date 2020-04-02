@@ -16,9 +16,6 @@ module Curator
     getter ref : String?
     getter cur : String?
 
-    def initialize(@evt, @uts, @org, @bld, @lvl, @loc, @src, @val, @mod = nil, @ref = nil, @cur = nil)
-    end
-
     def blank?(attribute : String) : Bool
       val = value(attribute)
       val.nil? || val == ""

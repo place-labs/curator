@@ -1,5 +1,4 @@
-require "./event"
-require "./filter/rules"
+require "./curator/base"
 
 module Curator
 end

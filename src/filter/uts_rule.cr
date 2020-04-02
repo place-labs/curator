@@ -9,11 +9,9 @@ module Curator
       getter :attribute, :operation, :values
 
       @operation : Operation
-      @values : Array(Int64)
 
-      def initialize(@attribute : String, operation : String, values : Array(String))
+      def initialize(@attribute : String, operation : String, @values : Array(Int64))
         @operation = Operation.parse(operation)
-        @values = values.map(&.to_i64)
       end
 
       def pass?(event : Event) : Bool
