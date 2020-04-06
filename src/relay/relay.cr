@@ -1,13 +1,14 @@
 module Curator
   class Relay
-    getter :event, :rules, :forwards_manager
+    getter :rules, :forwards_manager, :transformer
 
-    def initialize(@config : YAML::Any, @rules : Curator::Filter::Rules, @forwards_manager : Curator::Forwards::Manager)
+    def initialize(@rules : Curator::Filter::Rules, @forwards_manager : Curator::Forwards::Manager, @transformer : Curator::Transformer)
     end
 
     def call(event : Curator::Event)
       if rules.pass?(event)
-        handle_forwards(event)
+        transformed_event = transformer.call(event)
+        handle_forwards(transformed_event)
       end
     end
 

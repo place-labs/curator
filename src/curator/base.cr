@@ -2,6 +2,7 @@ require "../api/controller"
 require "../filter/rules"
 require "../forwards/manager"
 require "../relay/relay"
+require "../transformer/transformer"
 
 module Curator
   class Base
@@ -11,9 +12,11 @@ module Curator
 
     def initialize
       @config = load_config
-      @rules = Curator::Filter::Rules.new
-      @relay = Curator::Relay.new(config: @config, rules: @rules, forwards_manager: Curator::Forwards::Manager.new(@config))
-      @controller = Curator::Api::Controller.new(config: @config, relay: @relay)
+      rules = Curator::Filter::Rules.new
+      transformer = Curator::Transformer.new(config: @config)
+      forwards_manager = Curator::Forwards::Manager.new(config: @config)
+      relay = Curator::Relay.new(rules: rules, forwards_manager: forwards_manager, transformer: transformer)
+      @controller = Curator::Api::Controller.new(config: @config, relay: relay)
     end
 
     private def load_config

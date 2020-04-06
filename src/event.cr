@@ -13,8 +13,8 @@ module Curator
     getter src : String
     getter mod : String?
     getter val : Float64
-    getter ref : String?
-    getter cur : String?
+    property ref : String?
+    property cur : String?
 
     def blank?(attribute : String) : Bool
       val = value(attribute)

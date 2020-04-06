@@ -46,9 +46,12 @@ module Curator
           else
             context.response.respond_with_status(401)
           end
+
+          socket.on_ping do
+            socket.pong
+          end
         end
       end
-
     end
   end
 end
