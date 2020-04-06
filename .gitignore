@@ -10,6 +10,7 @@ src/test.cr
 src/client_test.cr
 src/forward_server_one.cr
 src/forward_server_two.cr
+*.DS_STORE
 
 # Libraries don't need dependency lock
 # Dependencies will be locked in applications that use them
