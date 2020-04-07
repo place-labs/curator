@@ -10,12 +10,14 @@ module Curator
       def initialize(@url : URI, @api_key : String)
         buffer_size = ENV.has_key?("BUFFER_SIZE") ? ENV["BUFFER_SIZE"].to_i : 50000
         @buffer = Curator::Utils::RingBuffer.new(buffer_size)
+        @channel = Channel(Curator::Event).new
 
         setup
       end
 
       def send(event)
         @buffer.push(event)
+        flush_buffer
       end
 
       private def setup
@@ -24,7 +26,6 @@ module Curator
         rescue e
         end
         maintain_connection
-        start_flush_buffer_loop
       end
 
       private def maintain_connection
@@ -38,27 +39,31 @@ module Curator
                 @socket.not_nil!.ping
               else
                 connect
+                flush_buffer
               end
             rescue e
               @socket = nil
             end
           end
-          start_flush_buffer_loop
         end
       end
 
-      private def start_flush_buffer_loop
+      private def flush_buffer
         spawn do
-          loop do
-            # 10,000 events per sec
-            sleep 0.0001
-
-            case @socket
-            when HTTP::WebSocket
-              @socket.not_nil!.send(@buffer.shift.to_json) if !@buffer.empty?
-            end
+          while can_continue?
+            @channel.send(@buffer.shift)
           end
         end
+
+        spawn do
+          while can_continue?
+            @socket.not_nil!.send(@channel.receive.to_json)
+          end
+        end
+      end
+
+      private def can_continue?
+        !@socket.nil? && !@buffer.empty?
       end
 
       private def connect
