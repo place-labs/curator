@@ -6,9 +6,9 @@ module Curator
     include HTTP::Handler
     include Curator::Api::Helpers
 
-    getter :config, :relay
+    getter :relay
 
-    def initialize(@config : YAML::Any, @relay : Curator::Relay)
+    def initialize(@relay : Curator::Relay)
     end
 
     def call(context)

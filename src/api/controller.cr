@@ -9,20 +9,15 @@ module Curator
   module Api
     class Controller
       include Curator::Api::Helpers
-      getter :config, :port, :relay
+      getter :port, :relay
       @port : Int32
 
-      def initialize(@config : YAML::Any, @relay : Curator::Relay)
-        @port = case config.dig?("port")
-                when nil
-                  3000
-                else
-                  config.dig("port").as_i
-                end
+      def initialize(@relay : Curator::Relay)
+        @port = ENV.has_key?("PORT") ? ENV["PORT"].to_i : 3000
       end
 
       def start
-        server = HTTP::Server.new([ws_handler, HttpHandler.new(config, relay)])
+        server = HTTP::Server.new([ws_handler, HttpHandler.new(relay)])
         address = server.bind_tcp(port)
         puts "Listening on ws://#{address}"
         puts "Listening on http://#{address}"

@@ -1,70 +1,32 @@
+require "../forwards/forward"
+
 module Curator
   module Forwards
     class Manager
-      getter :config, :forwards, :retry_queue
+      getter :forwards, :retry_queue
 
-      def initialize(@config : YAML::Any)
-        @forwards = [] of HTTP::WebSocket
-        @retry_queue = [] of NamedTuple(url: URI, api_key: String)
-        start_reconnect_loop
-        load_forwards
+      def initialize
+        @forwards = [] of Curator::Forwards::Forward
+        initialize_forwards
       end
 
-      private def load_forwards
-        config["forwards"].as_a.map do |forward|
-          setup_socket({url: URI.parse(forward["url"].as_s), api_key: forward["api_key"].as_s})
+      private def initialize_forwards
+        @forwards = env_forwards.map do |forward|
+          Curator::Forwards::Forward.new(url: forward[:url], api_key: forward[:api_key])
         end
       end
 
-      private def setup_socket(forward)
-        begin
-          socket = HTTP::WebSocket.new(forward[:url],
-            HTTP::Headers{"x-api-key" => forward[:api_key]})
-
-          maintain_forwards(socket, forward)
-
-          @forwards << socket
-        rescue e
-          append_to_retry(forward)
+      # FORWARDS = "url1|api_key1 url2|api_key2"
+      # e.g. FORWARDS="ws://127.0.0.1:4444|firstapikey ws://127.0.0.1:5555|secondapikey"
+      private def env_forwards : Array(NamedTuple(url: URI, api_key: String))
+        fwds = ENV["FORWARDS"].split(" ")
+        fwds.map do |fwd|
+          url, key = fwd.split("|")
+          {
+            url:     URI.parse(url),
+            api_key: key,
+          }
         end
-      end
-
-      private def start_reconnect_loop
-        spawn do
-          loop do
-            sleep 3
-
-            retry_queue.each do |forward|
-              begin
-                socket = HTTP::WebSocket.new(forward[:url],
-                  HTTP::Headers{"x-api-key" => forward[:api_key]})
-                @forwards << socket
-                retry_queue.delete(forward)
-              rescue e
-              end
-            end
-          end
-        end
-      end
-
-      def maintain_forwards(socket, forward)
-        spawn do
-          loop do
-            sleep 3
-
-            begin
-              socket.ping
-            rescue e
-              @forwards.delete(socket)
-              append_to_retry(forward)
-              break
-            end
-          end
-        end
-      end
-
-      private def append_to_retry(forward : NamedTuple(url: URI, api_key: String))
-        @retry_queue << forward
       end
     end
   end

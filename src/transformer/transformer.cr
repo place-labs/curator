@@ -2,13 +2,13 @@ require "openssl"
 
 module Curator
   class Transformer
-    getter :config, :curator_id, :pepper
+    getter :curator_id, :pepper
     @curator_id : String
     @pepper : String
 
-    def initialize(@config : YAML::Any)
-      @curator_id = @config["curator_id"].as_s
-      @pepper = @config["pepper"].as_s
+    def initialize()
+      @curator_id = ENV["CURATOR_ID"]
+      @pepper = ENV["CURATOR_PEPPER"]
     end
 
     def call(event : Curator::Event) : Curator::Event

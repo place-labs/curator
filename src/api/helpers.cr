@@ -14,7 +14,7 @@ module Curator
 
         return false if key.nil?
 
-        key == config["api_key"]
+        key == ENV["API_KEY"]
       end
 
       private def to_event(data)

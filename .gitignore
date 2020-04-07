@@ -3,7 +3,6 @@
 /bin/
 /.shards/
 *.dwarf
-config/config.yml
 config/rules.yml
 config/ref_rules.yml
 src/test.cr
