@@ -8,14 +8,14 @@ module Curator
       property buffer : Curator::Utils::RingBuffer
 
       def initialize(@url : URI, @api_key : String)
-        buffer_size = ENV.has_key?("BUFFER_SIZE") ? ENV["BUFFER_SIZE"].to_i : 50000
+        buffer_size = ENV.has_key?("BUFFER_SIZE") ? ENV["BUFFER_SIZE"].to_i : 100000
         @buffer = Curator::Utils::RingBuffer.new(buffer_size)
         @channel = Channel(Curator::Event).new
 
         setup
       end
 
-      def send(event)
+      def send(event : Curator::Event)
         @buffer.push(event)
         flush_buffer
       end
