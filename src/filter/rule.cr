@@ -10,7 +10,6 @@ module Curator
 
       @operation : Operation
 
-
       def initialize(@attribute : String, operation : String, @values : Array(Float64) | Array(String))
         @operation = Operation.parse(operation)
       end

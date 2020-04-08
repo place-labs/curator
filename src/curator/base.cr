@@ -15,5 +15,9 @@ module Curator
       relay = Curator::Relay.new(rules: rules, forwards_manager: forwards_manager, transformer: transformer)
       @controller = Curator::Api::Controller.new(relay: relay)
     end
+
+    def start
+      controller.start
+    end
   end
 end
