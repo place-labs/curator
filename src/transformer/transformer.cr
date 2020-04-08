@@ -6,9 +6,8 @@ module Curator
     @curator_id : String
     @pepper : String
 
-    def initialize()
-      @curator_id = ENV["CURATOR_ID"]
-      @pepper = ENV["CURATOR_PEPPER"]
+    def initialize(@curator_id : String = ENV["CURATOR_ID"],
+                   @pepper : String = ENV["CURATOR_PEPPER"])
     end
 
     def call(event : Curator::Event) : Curator::Event
