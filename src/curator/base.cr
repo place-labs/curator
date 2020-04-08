@@ -5,6 +5,8 @@ require "../relay/relay"
 require "../transformer/transformer"
 
 module Curator
+  # Base Class responsible for instantiating all relevant components
+  # and handing them over.
   class Base
     getter :controller
 

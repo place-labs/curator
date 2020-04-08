@@ -4,6 +4,8 @@ require "./uts_rule"
 
 module Curator
   class Filter
+    # Responsible for reading the rules from config yml file and
+    # instantiating the relevant `Rule` or `UtsRule`.
     class Rules
       getter :rules
       @rules : Array(Rule | UtsRule) = [] of Rule | UtsRule
@@ -17,6 +19,8 @@ module Curator
         end
       end
 
+      # Iterates through all available rules
+      # and filters an event based on them
       def pass?(event : Event) : Bool
         rules.all? do |rule|
           rule.pass?(event)

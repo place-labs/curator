@@ -3,6 +3,11 @@ require "../utils/ring_buffer"
 
 module Curator
   module Forwards
+    # Responsible for maintaining the websocket connection
+    # And sending the event data through to the forward server.
+    # Has 2 long running `Fiber`s.
+    # 1. To maintain the forward websocket connection. Polls the connection every second.
+    # 2. To flush the buffer if there is an available connection and data in buffer. Polls the buffer 10000 per second.
     class Forward
       getter :url, :api_key
       property socket : HTTP::WebSocket?
@@ -16,6 +21,7 @@ module Curator
         maintain_flush_buffer_loop
       end
 
+      # Accepts the event data in a buffer
       def push(event : Curator::Event)
         @buffer.push(event)
       end

@@ -1,5 +1,6 @@
 module Curator
   class Filter
+    # Responsible for defining filter for `Event.uts` attribute.
     class UtsRule
       enum Operation
         GreaterThanEqual
@@ -14,6 +15,10 @@ module Curator
         @operation = Operation.parse(operation)
       end
 
+      # Filter the event based on
+      # * event attribute `Event.uts` value
+      # * rule `operation`
+      # * rule `values`
       def pass?(event : Event) : Bool
         val = event.value(attribute)
         case {operation, val}

@@ -1,6 +1,8 @@
 require "json"
 
 module Curator
+  # Responsible for translating incoming `event` json data into a crystal object
+  # Adds some utility methods to ease interacting with `event`
   class Event
     include JSON::Serializable
 

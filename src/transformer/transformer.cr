@@ -1,6 +1,8 @@
 require "openssl"
 
 module Curator
+  # Responsible for peppering the `Event.ref`
+  # and appending the `cur` with `ENV["CURATOR_ID"]`
   class Transformer
     getter :curator_id, :pepper
     @curator_id : String

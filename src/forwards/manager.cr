@@ -2,6 +2,8 @@ require "../forwards/forward"
 
 module Curator
   module Forwards
+    # Responsible for reading the `ENV["FORWARDS"]` and instantiating
+    # an Array of `Curator::Forwards::Forward`
     class Manager
       getter :forwards, :retry_queue
 

@@ -1,5 +1,6 @@
 module Curator
   class Filter
+    # Responsible for defining filter for all `Event` attributes except `Event.uts` attribute.
     class Rule
       enum Operation
         Include
@@ -14,6 +15,10 @@ module Curator
         @operation = Operation.parse(operation)
       end
 
+      # Filter the event based on
+      # * event attribute value
+      # * rule `operation`
+      # * rule `values`
       def pass?(event : Event) : Bool
         case operation
         when Operation::Include

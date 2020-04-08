@@ -2,6 +2,7 @@ require "http/server/handler"
 require "./helpers"
 
 module Curator
+  # Handles the HTTP POST call for `/ingest` endpoint.
   class HttpHandler
     include HTTP::Handler
     include Curator::Api::Helpers

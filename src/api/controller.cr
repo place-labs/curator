@@ -7,6 +7,12 @@ require "../relay/relay"
 
 module Curator
   module Api
+    # API Controller
+    # Responsible for accepting incoming `event` data.
+    # Exposes two endpoints
+    # 1. `/ingest` WebSocket, which accepts event in json format
+    # 2. `/ingest` HTTP POST, which accepts events in ndjson format
+    # Hands off the event to `Relay`
     class Controller
       include Curator::Api::Helpers
       getter :port, :relay
@@ -16,6 +22,7 @@ module Curator
         @port = ENV.has_key?("PORT") ? ENV["PORT"].to_i : 3000
       end
 
+      # Starts the HTTP::Server to serve incoming requests.
       def start
         server = HTTP::Server.new([ws_handler, HttpHandler.new(relay)])
         address = server.bind_tcp(port)
@@ -24,7 +31,7 @@ module Curator
         server.listen
       end
 
-      def ws_handler
+      private def ws_handler
         HTTP::WebSocketHandler.new do |socket, context|
           if authenticated?(context)
             case request_path(context)
