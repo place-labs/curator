@@ -16,7 +16,7 @@ module Curator
       fwds = forwards_manager.forwards
 
       fwds.each do |forward|
-        forward.send(event)
+        forward.push(event)
       end
     end
   end

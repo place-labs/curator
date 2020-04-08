@@ -3,7 +3,7 @@ module Curator
     class RingBuffer
       property list : Array(Curator::Event)
 
-      delegate empty?, shift, to: @list
+      delegate empty?, shift, size, to: @list
 
       def initialize(@max_size : Int32)
         @list = [] of Curator::Event
