@@ -5,17 +5,14 @@ require "./uts_rule"
 module Curator
   class Filter
     class Rules
-      RULES_PATH     = "config/rules.yml"
-      REF_RULES_PATH = "config/ref_rules.yml"
-
       getter :rules
       @rules : Array(Rule | UtsRule) = [] of Rule | UtsRule
 
-      def initialize
-        @rules = rules_config.as_a.map do |config|
+      def initialize(rules_path : String = "config/rules.yml",  ref_rules_path : String = "config/ref_rules.yml")
+        @rules = rules_config(rules_path).as_a.map do |config|
           to_rule(config)
         end
-        @rules += ref_rules_config.as_a.map do |config|
+        @rules += ref_rules_config(ref_rules_path).as_a.map do |config|
           to_rule(config)
         end
       end
@@ -26,17 +23,17 @@ module Curator
         end
       end
 
-      private def rules_config
-        raise "Please define rules in config/rules.yml" unless File.exists?(RULES_PATH)
+      private def rules_config(rules_path : String)
+        raise "Please define rules in #{rules_path}" unless File.exists?(rules_path)
 
-        File.open(RULES_PATH) do |file|
+        File.open(rules_path) do |file|
           YAML.parse(file)
         end
       end
 
-      private def ref_rules_config
-        if File.exists?(REF_RULES_PATH)
-          File.open(REF_RULES_PATH) do |file|
+      private def ref_rules_config(ref_rules_path : String)
+        if File.exists?(ref_rules_path)
+          File.open(ref_rules_path) do |file|
             YAML.parse(file)
           end
         else

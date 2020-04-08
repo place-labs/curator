@@ -1,0 +1,5 @@
+- attribute: "ref"
+  operation: "include"
+  values:
+    - blank
+    - user@example.com

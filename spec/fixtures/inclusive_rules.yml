@@ -1,0 +1,41 @@
+- attribute: "org"
+  operation: "include"
+  values:
+    - apple
+    - google
+- attribute: "bld"
+  operation: "include"
+  values:
+    - bld-1
+- attribute: "lvl"
+  operation: "include"
+  values:
+    - lvl-1
+- attribute: "loc"
+  operation: "include"
+  values:
+    - loc-1
+- attribute: "src"
+  operation: "include"
+  values:
+    - jj@example.com
+- attribute: "mod"
+  operation: "include"
+  values:
+    - mod-1
+- attribute: "val"
+  operation: "include"
+  values:
+    - 1.0
+- attribute: "evt"
+  operation: "include"
+  values:
+    - presence
+- attribute: "uts"
+  operation: "less_than_equal"
+  values:
+    - 1580276617007
+- attribute: "uts"
+  operation: "greater_than_equal"
+  values:
+    - 1580276617005

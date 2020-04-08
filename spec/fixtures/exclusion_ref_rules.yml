@@ -1,0 +1,4 @@
+- attribute: "ref"
+  operation: "exclude"
+  values:
+    - blank
