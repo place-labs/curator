@@ -7,13 +7,13 @@ module Curator
     include HTTP::Handler
     include Curator::Api::Helpers
 
-    getter :relay
+    getter :relay, :auth
 
-    def initialize(@relay : Curator::Relay)
+    def initialize(@relay : Curator::Relay, @auth : Curator::Utils::Auth)
     end
 
     def call(context)
-      if authenticated?(context)
+      if auth.valid?(context)
         case {request_path(context), request_method(context)}
         when {"/ingest", "POST"}
           process_events(context)

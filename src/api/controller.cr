@@ -15,25 +15,30 @@ module Curator
     # Hands off the event to `Relay`
     class Controller
       include Curator::Api::Helpers
-      getter :port, :relay
+      getter :port, :relay, :auth
       @port : Int32
+      @server : HTTP::Server?
 
-      def initialize(@relay : Curator::Relay)
+      def initialize(@relay : Curator::Relay, @auth : Curator::Utils::Auth)
         @port = ENV.has_key?("PORT") ? ENV["PORT"].to_i : 3000
       end
 
       # Starts the HTTP::Server to serve incoming requests.
       def start
-        server = HTTP::Server.new([ws_handler, HttpHandler.new(relay)])
-        address = server.bind_tcp(port)
+        @server = HTTP::Server.new([ws_handler, HttpHandler.new(relay: relay, auth: auth)])
+        address = @server.not_nil!.bind_tcp(port)
         puts "Listening on ws://#{address}"
         puts "Listening on http://#{address}"
-        server.listen
+        @server.not_nil!.listen
+      end
+
+      def stop
+        @server.not_nil!.close unless @server.not_nil!.closed?
       end
 
       private def ws_handler
         HTTP::WebSocketHandler.new do |socket, context|
-          if authenticated?(context)
+          if auth.valid?(context)
             case request_path(context)
             when "/ingest"
               socket.on_message do |message|

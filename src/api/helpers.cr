@@ -9,14 +9,6 @@ module Curator
         http_context.request.method
       end
 
-      private def authenticated?(http_context)
-        key = http_context.request.headers["x-api-key"]?
-
-        return false if key.nil?
-
-        key == ENV["API_KEY"]
-      end
-
       private def to_event(data)
         Curator::Event.from_json(data)
       end

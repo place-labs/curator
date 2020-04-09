@@ -7,13 +7,13 @@ module Curator
     class Manager
       getter :forwards, :retry_queue
 
-      def initialize
+      def initialize(forwards_tuple : Array(NamedTuple(url: URI, api_key: String)) = env_forwards)
         @forwards = [] of Curator::Forwards::Forward
-        initialize_forwards
+        initialize_forwards(forwards_tuple)
       end
 
-      private def initialize_forwards
-        @forwards = env_forwards.map do |forward|
+      private def initialize_forwards(forwards_tuple)
+        @forwards = forwards_tuple.map do |forward|
           Curator::Forwards::Forward.new(url: forward[:url], api_key: forward[:api_key])
         end
       end

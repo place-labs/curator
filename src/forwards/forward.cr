@@ -7,7 +7,7 @@ module Curator
     # And sending the event data through to the forward server.
     # Has 2 long running `Fiber`s.
     # 1. To maintain the forward websocket connection. Polls the connection every second.
-    # 2. To flush the buffer if there is an available connection and data in buffer. Polls the buffer 10000 per second.
+    # 2. To flush the buffer if there is an available connection and data in buffer. Polls the buffer 5000 per second.
     class Forward
       getter :url, :api_key
       property socket : HTTP::WebSocket?
@@ -52,8 +52,8 @@ module Curator
       private def maintain_flush_buffer_loop
         spawn do
           loop do
-            # Polling 10000 times a second
-            sleep 0.00001
+            # Polling 5000 times a second
+            sleep 0.0005
 
             begin
               @socket.not_nil!.send(@buffer.shift.to_json) if can_continue?
