@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/PlaceOS/curator.svg?branch=master)](https://travis-ci.com/PlaceOS/curator)
+[![Build Status](https://travis-ci.com/place-labs/curator.svg?branch=master)](https://travis-ci.com/place-labs/curator)
 
 # Curator
 
@@ -111,7 +111,7 @@ To run specs `crystal spec`
 
 ## Contributing
 
-1. Fork it (<https://github.com/PlaceOS/curator/fork>)
+1. Fork it (<https://github.com/place-labs/curator/fork>)
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
